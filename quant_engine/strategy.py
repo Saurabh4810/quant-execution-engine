@@ -20,7 +20,10 @@ class RiskGate:
         return not self.halted and abs(projected) <= self.limits.position_cap
 
 class GridEngine:
-    def __init__(self, limits: RiskLimits): self.limits, self.anchor, self.levels = limits, None, 0
+    def __init__(self, limits: RiskLimits):
+        self.limits = limits
+        self.anchor: Decimal | None = None
+        self.levels = 0
     def signal(self, price: Decimal, atr: Decimal, position: Position) -> Optional[Side]:
         if not atr or atr <= 0: return None
         if self.anchor is None: self.anchor = price; return None
