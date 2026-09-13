@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  test:
+    name: Lint · Type-check · Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dev tools
+        run: pip install ruff mypy
+
+      - name: Lint (ruff)
+        run: ruff check quant_engine tests
+
+      - name: Type-check (mypy)
+        run: mypy quant_engine --ignore-missing-imports --strict-optional
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+
+      - name: SDLC regression check
+        run: python -m quant_engine.sdlc_agent
+        continue-on-error: true   # advisory only until baseline is locked
