@@ -233,6 +233,8 @@ class LiveRunner:
 
         # Submit order — idempotency key = price + side + ts
         client_id = f"{self.contract.symbol}:{side}:{tick.get('timestamp', price)}"
+        if self._order_service is None:
+            raise RuntimeError("OrderService is not initialized")
         order = self._order_service.submit(
             self.contract, side, self.contract.lot_size, price, client_id
         )

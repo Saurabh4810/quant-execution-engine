@@ -75,7 +75,7 @@ def bollinger(
         raise ValueError(f"bollinger requires at least {period} closes")
     window = closes[-period:]
     mid = sum(window, D(0)) / period
-    variance = sum((p - mid) ** 2 for p in window) / period
+    variance = sum(((p - mid) ** 2 for p in window), D(0)) / D(period)
     # Integer sqrt via Newton's method on Decimal to avoid float conversion
     std = variance.sqrt()
     band = num_std * std

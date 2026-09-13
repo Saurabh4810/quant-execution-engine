@@ -5,3 +5,6 @@ requires-python = ">=3.9"
 
 [tool.unittest]
 start-directory = "tests"
+
+[tool.ruff.lint]
+select = ["E9", "F63", "F7", "F82"]
